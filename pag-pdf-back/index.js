@@ -5,6 +5,12 @@ const path = require('path');
 const fs = require('fs');
 const pool = require('./db'); // importamos el pool de db
 
+const uploadRouter = require('./routes/upload');
+const filesRouter = require('./routes/files');
+
+const app = express();
+
+const PORT = process.env.PORT || 4000;
 
 //const path = require('path');
 //const express = require('express');
@@ -22,11 +28,6 @@ app.get('*', (req, res) => {
 });
 
 
-const uploadRouter = require('./routes/upload');
-const filesRouter = require('./routes/files');
-
-const app = express();
-const PORT = process.env.PORT || 4000;
 
 //
 app.use(cors({
