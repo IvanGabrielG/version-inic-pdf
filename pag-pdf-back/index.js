@@ -12,9 +12,7 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-//MOdificación para servir de forma estática el front
-const frontendDist = path.join(__dirname, '..', 'pag-pdf', 'dist');
-app.use(express.static(frontendDist));
+
 
 
 
