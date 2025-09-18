@@ -7,7 +7,7 @@ const pool = require('./db'); // importamos el pool de db
 
 
 //const path = require('path');
-const express = require('express');
+//const express = require('express');
 //const app = express(); Re-colocar al principio del archivo
 
 //PARA DESPLEGAR FRONT Y BACK DESDE UN SOLO ENLACE:
