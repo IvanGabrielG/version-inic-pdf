@@ -6,7 +6,7 @@ const fs = require('fs');
 const pool = require('./db'); // importamos el pool de db
 
 
-const path = require('path');
+//const path = require('path');
 const express = require('express');
 //const app = express(); Re-colocar al principio del archivo
 
