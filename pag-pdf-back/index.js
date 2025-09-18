@@ -12,20 +12,9 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-//const path = require('path');
-//const express = require('express');
-//const app = express(); Re-colocar al principio del archivo
-
-//PARA DESPLEGAR FRONT Y BACK DESDE UN SOLO ENLACE:
-
-// Sirvo un frontend estático
-const frontendPath = path.join(__dirname, '..', 'pag-pdf', 'dist');
-app.use(express.static(frontendPath));
-
-// Se detalla una ruta fallback para React Router
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
+//MOdificación para servir de forma estática el front
+const frontendDist = path.join(__dirname, '..', 'pag-pdf', 'dist');
+app.use(express.static(frontendDist));
 
 
 

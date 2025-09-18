@@ -175,7 +175,7 @@ export default function Visualizar() {
                   onClick={() => handleReplaceClick(f.id)}
                   className="px-3 py-1 rounded bg-yellow-500 text-white hover:bg-yellow-600"
                 >
-                  Reemplazar
+                  Actualizar
                 </button>
 
                 <button

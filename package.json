@@ -3,5 +3,15 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13"
+  },
+
+  "name": "pdf-app-root",
+  "private": true,
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node pag-pdf-back/index.js",
+    "heroku-postbuild": "npm --prefix ./pag-pdf install && npm --prefix ./pag-pdf run build && npm --prefix ./pag-pdf-back install"
   }
 }
