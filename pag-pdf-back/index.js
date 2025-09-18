@@ -6,6 +6,22 @@ const fs = require('fs');
 const pool = require('./db'); // importamos el pool de db
 
 
+const path = require('path');
+const express = require('express');
+//const app = express(); Re-colocar al principio del archivo
+
+//PARA DESPLEGAR FRONT Y BACK DESDE UN SOLO ENLACE:
+
+// Sirvo un frontend estático
+const frontendPath = path.join(__dirname, '..', 'pag-pdf', 'dist');
+app.use(express.static(frontendPath));
+
+// Se detalla una ruta fallback para React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
+
 const uploadRouter = require('./routes/upload');
 const filesRouter = require('./routes/files');
 
@@ -18,7 +34,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Servir la carpeta de uploads de forma estática
+// Sirvo la carpeta de uploads de forma estática
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 app.use('/uploads', express.static(uploadsDir));
@@ -35,7 +51,7 @@ app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
 
-// Endpoint de prueba para comprobar conexión a MySQL
+// Endpoint de prueba, compruebo conexión a MySQL
 app.get('/test-db', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT 1 + 1 AS result');
@@ -46,7 +62,7 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-// manejador genérico de errores (útil para errores de multer)
+// Manejador genérico de errores
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: err.message || 'Error del servidor' });

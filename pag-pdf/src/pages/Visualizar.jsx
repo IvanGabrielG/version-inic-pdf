@@ -41,7 +41,7 @@ export default function Visualizar() {
     try {
       const res = await fetch(`${API_URL}/api/files`);
       const data = await res.json();
-      console.log("GET /api/files ->", data); // mira esto si algo sale raro
+      console.log("GET /api/files ->", data); // Para debuggear y observar si algo sale raro
 
       if (!Array.isArray(data)) {
         setFiles([]);
@@ -82,7 +82,7 @@ export default function Visualizar() {
       setMessage("✅ Archivo eliminado correctamente");
     } catch (err) {
       console.error("DELETE error:", err);
-      setMessage("❌ Error al conectar con el backend al eliminar (ver consola).");
+      setMessage("Error al conectar con el backend al eliminar (ver consola).");
     }
   };
 
@@ -95,11 +95,11 @@ export default function Visualizar() {
   const handleReplaceSubmit = async (e) => {
     e.preventDefault();
     if (!newFile) {
-      setMessage("⚠️ Selecciona un PDF para reemplazar");
+      setMessage("Selecciona un PDF para reemplazar");
       return;
     }
     if (!selectedFileId) {
-      setMessage("⚠️ Id de archivo no seleccionado");
+      setMessage("Id de archivo no seleccionado");
       return;
     }
 
@@ -187,7 +187,7 @@ export default function Visualizar() {
               </div>
             </div>
 
-            {/* Formulario de reemplazo inline (aparece debajo del item correspondiente) */}
+            {/* Para abrir un formulario de reemplazo in-line */}
             {selectedFileId === f.id && (
               <form onSubmit={handleReplaceSubmit} className="mt-3 flex items-center gap-2">
                 <input

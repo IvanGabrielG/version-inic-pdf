@@ -4,7 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 export default function Layout() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Barra de navegación fija arriba */}
+      {/* Para tener la barra de navegación fija arriba */}
       <header className="bg-gray-100 shadow-md">
         <nav className="max-w-5xl mx-auto flex justify-center space-x-6 py-4">
           <Link
@@ -28,7 +28,7 @@ export default function Layout() {
         </nav>
       </header>
 
-      {/* Contenido de cada página */}
+      {/* y acá despliego el contenido de cada página */}
       <main className="flex flex-col items-center justify-start mt-8">
         <Outlet />
       </main>

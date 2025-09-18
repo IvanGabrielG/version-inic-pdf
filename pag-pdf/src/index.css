@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* opcional: pequeñas personalizaciones */
 html, body, #root {
   height: 100%;
 }

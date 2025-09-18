@@ -9,13 +9,13 @@ const router = express.Router();
 const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
-// storage para reemplazos (nombre único)
+// almacenamiento para reemplazos (nombre único)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOADS_DIR),
   filename: (req, file, cb) => cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname))
 });
 
-// fileFilter: solo chequeo rápido de mimetype; validación completa después
+// fileFilter: aca se hace solo chequeo rápido de mimetype; validación completa después
 const fileFilter = (req, file, cb) => {
   if (file.mimetype !== 'application/pdf') {
     return cb(new Error('Sólo se permiten archivos PDF (mimetype inválido)'));
@@ -29,7 +29,7 @@ const upload = multer({
   fileFilter
 });
 
-// helper para validar magic bytes desde disco
+// Para validar magic bytes (validación completa) desde disco
 async function validatePdf(filePath) {
   try {
     const fd = await fs.promises.open(filePath, 'r');
@@ -68,17 +68,17 @@ router.get('/files', async (req, res) => {
   }
 });
 
-// PUT /api/files/:id -> reemplazar archivo existente
+// PUT /api/files/:id -> reemplazar archivo existente, para función de botón "REEMPLAZAR"
 router.put('/files/:id', upload.single('file'), async (req, res, next) => {
   const id = req.params.id;
 
   try {
     if (!req.file) return res.status(400).json({ error: 'Archivo no recibido' });
 
-    // comprobar que exista el registro a reemplazar
+    // compruebo que exista el registro a reemplazar
     const [rows] = await pool.query('SELECT filename FROM pdf_files WHERE id = ?', [id]);
     if (rows.length === 0) {
-      // borrar archivo subido porque no hay registro
+      // borro archivo subido porque no hay registro
       try { await fs.promises.unlink(path.join(UPLOADS_DIR, req.file.filename)); } catch (e) { /* ignore */ }
       return res.status(404).json({ error: 'Registro no encontrado' });
     }
@@ -86,7 +86,7 @@ router.put('/files/:id', upload.single('file'), async (req, res, next) => {
     const oldFilename = rows[0].filename;
     const newPath = path.join(UPLOADS_DIR, req.file.filename);
 
-    // validar magic bytes del nuevo archivo
+    // valido magic bytes del nuevo archivo
     const isPdf = await validatePdf(newPath);
     if (!isPdf) {
       // borrar archivo inválido
@@ -94,13 +94,13 @@ router.put('/files/:id', upload.single('file'), async (req, res, next) => {
       return res.status(400).json({ error: 'El archivo no tiene cabecera PDF válida' });
     }
 
-    // actualizar DB con nuevo archivo
+    // actualizo DB con nuevo archivo
     await pool.query(
       `UPDATE pdf_files SET original_name = ?, filename = ?, mime = ?, size = ? WHERE id = ?`,
       [req.file.originalname, req.file.filename, req.file.mimetype, req.file.size, id]
     );
 
-    // borrar archivo antiguo del disco (si existe)
+    // borro archivo antiguo del disco (si existe)
     const oldPath = path.join(UPLOADS_DIR, oldFilename);
     if (oldFilename && fs.existsSync(oldPath)) {
       try { await fs.promises.unlink(oldPath); } catch (e) { console.warn('No se pudo borrar archivo antiguo:', e.message); }
@@ -119,7 +119,7 @@ router.put('/files/:id', upload.single('file'), async (req, res, next) => {
       }
     });
   } catch (err) {
-    // si algo falla, eliminar nuevo archivo para no dejar basura
+    // si algo falla, elimino de nuevo archivo para no dejar basura
     if (req.file && req.file.filename) {
       try { await fs.promises.unlink(path.join(UPLOADS_DIR, req.file.filename)); } catch (e) { /* ignore */ }
     }

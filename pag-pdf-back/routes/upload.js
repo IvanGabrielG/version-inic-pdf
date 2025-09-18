@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// fileFilter: comprobación básica (mimetype)
+// Hago comprobación básica (mimetype), como en file.js
 const fileFilter = (req, file, cb) => {
   if (file.mimetype !== "application/pdf") {
     return cb(new Error("Sólo se permiten archivos PDF (mimetype inválido)"));
@@ -33,7 +33,7 @@ const upload = multer({
   fileFilter
 });
 
-// helper: valida magic bytes leyendo primeros 4 bytes del archivo en disco
+// Valido los magic bytes
 async function validatePdf(filePath) {
   try {
     const fd = await fs.promises.open(filePath, 'r');
@@ -64,12 +64,12 @@ router.post('/upload', upload.single('file'), async (req, res, next) => {
     // Validar magic bytes ahora que el archivo ya está en disco
     const isPdf = await validatePdf(savedPath);
     if (!isPdf) {
-      // borrar archivo inválido
+      // borro archivo inválido
       try { await fs.promises.unlink(savedPath); } catch (e) { /* ignore */ }
       return res.status(400).json({ error: 'El archivo no tiene cabecera PDF válida' });
     }
 
-    // Insertar metadatos en BD
+    // Inserto metadatos en BD
     const sql = `INSERT INTO pdf_files (name, original_name, filename, mime, size) VALUES (?, ?, ?, ?, ?)`;
     const [result] = await pool.query(sql, [name || null, originalname, filename, mimetype, size]);
 
@@ -86,7 +86,7 @@ router.post('/upload', upload.single('file'), async (req, res, next) => {
       }
     });
   } catch (err) {
-    // Si algo falla después de guardar el archivo, intentar eliminarlo para no dejar basura
+    // Si algo falla después de guardar el archivo, intento eliminarlo para no dejar basura
     if (req.file && req.file.filename) {
       const attemptPath = path.join(UPLOADS_DIR, req.file.filename);
       try { await fs.promises.unlink(attemptPath); } catch (e) { /* ignore */ }
