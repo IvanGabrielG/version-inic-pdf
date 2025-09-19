@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 4000;
 
 //
 app.use(cors({
-  origin: "https://tu-frontend.onrender.com", methods: ["GET", "POST", "PUT", "DELETE"]
+  origin: "https://version-inic-pdf-1.onrender.com", methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 app.use(express.json());
 
