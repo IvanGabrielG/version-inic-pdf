@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 4000;
 
 //
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173'
+  origin: "https://tu-frontend.onrender.com", methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 app.use(express.json());
 
